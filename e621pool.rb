@@ -1,4 +1,5 @@
 require 'rest-client'
+require 'json'
 
 $links = []
 
@@ -55,9 +56,10 @@ def get_imgs(pool, page)
 end
 
 def download_pics
-  Dir.mkdir $poolname unless Dir.exist? $poolname
+  dirname = ARGV[0] + ' - ' + $poolname
+  Dir.mkdir dirname unless Dir.exist? $poolname
   $links.each_with_index do |item, index|
-    name = $poolname + '/' + (index + 1).to_s + File.extname(item)
+    name = dirname + '/' + (index + 1).to_s + File.extname(item)
     puts "Downloading #{item} to \"#{name}\""
     File.open(name, 'w') do |f|
       response = RestClient.get item do |str|
